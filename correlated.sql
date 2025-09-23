@@ -43,6 +43,19 @@ select (select avg(total) from orders) as overall_average_order_total;
 
 select avg(total) as overall_average_order_total from orders;
 
+-- calculate the overall average once in a subquery, then compare it against each row
+
+SELECT 
+    o.order_id, 
+    o.total,
+    (SELECT AVG(total) FROM orders) AS overall_average,
+    CASE 
+        WHEN o.total > (SELECT AVG(total) FROM orders) THEN 'Above Average'
+        ELSE 'Below or Equal to Average'
+    END AS comparison
+FROM orders o;
+
+
 -- List customer names who placed at least one order with total greater than the overall average order total.
 
 select * from customers;
