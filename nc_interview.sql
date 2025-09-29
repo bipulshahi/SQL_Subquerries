@@ -1,4 +1,27 @@
 -- Interview
+
+/*
+-- Which is better?
+Performance:
+EXISTS is usually more efficient than IN when the subquery returns a large set.
+
+IN can be fine (or even faster) when the subquery result is small and well indexed.
+Semantics:
+
+EXISTS is often considered more robust (doesn’t get tripped up by NULLs).
+Readability:
+IN is simpler to read for “value in set”.
+EXISTS is better for “does a match exist”.
+
+Rule of Thumb
+Use EXISTS for correlated subqueries (when checking row-by-row matches).
+Use IN for static, small lists (e.g., WHERE country IN ('USA','UK','India')).
+
+EXISTS is generally better, because:
+Orders can have many rows.
+DB can short-circuit after the first match.
+*/
+
 -- Customer details for the 2nd largest order
 
 -- Uses ORDER BY … LIMIT
