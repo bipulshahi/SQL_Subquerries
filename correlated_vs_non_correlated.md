@@ -1,6 +1,3 @@
-That’s a **really smart question** 
-
-Short answer:
 
 * **Most queries** can be written **both ways** (correlated and non-correlated).
 * But sometimes **one form is more natural / readable**, and sometimes **one form isn’t possible without extra schema design (like a join table)**.
