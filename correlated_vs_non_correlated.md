@@ -41,7 +41,7 @@ Both give the same result.
 
 ---
 
-## ✅ When correlated is **more natural / needed**
+## When correlated is **more natural / needed**
 
 Sometimes you want to check **existence** of a related row quickly, e.g.:
 
