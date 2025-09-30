@@ -34,7 +34,7 @@ JOIN (
 WHERE o.total > t.avg_total;
 ```
 
-👉 Both give the same result.
+Both give the same result.
 
 * Correlated = conceptually simpler (“for this row, compare to avg”).
 * Non-correlated = often faster because it computes averages just once.
