@@ -90,4 +90,77 @@ FROM orders o
 JOIN customers c ON o.customer_id = c.customer_id;
 
 
+-- Find products that have been ordered by customers from multiple cities.
+select * from orders;
+select * from order_items;
+select * from products;
+select * from customers;
+-- correlated
+
+SELECT 
+    p.product_id,
+    p.name,
+    (
+        SELECT COUNT(DISTINCT c.city)
+        FROM customers c
+        JOIN orders o ON c.customer_id = o.customer_id
+        JOIN order_items oi ON o.order_id = oi.order_id
+        WHERE oi.product_id = p.product_id
+    ) AS city_count
+FROM products p;
+
+SELECT p.name FROM products p
+WHERE (
+    SELECT COUNT(DISTINCT c.city)
+    FROM customers c
+    JOIN orders o ON c.customer_id = o.customer_id
+    JOIN order_items oi ON o.order_id = oi.order_id
+    WHERE oi.product_id = p.product_id
+) > 1;
+
+SELECT 
+    p.product_id,
+    p.name,
+    (
+        SELECT COUNT(DISTINCT c.city)
+        FROM customers c
+        JOIN orders o ON c.customer_id = o.customer_id
+        JOIN order_items oi ON o.order_id = oi.order_id
+        WHERE oi.product_id = p.product_id
+    ) AS city_count
+FROM products p
+WHERE (
+    SELECT COUNT(DISTINCT c.city)
+    FROM customers c
+    JOIN orders o ON c.customer_id = o.customer_id
+    JOIN order_items oi ON o.order_id = oi.order_id
+    WHERE oi.product_id = p.product_id
+) > 1;
+
+
+-- non correlated
+SELECT p.name
+FROM products p
+JOIN (
+    SELECT oi.product_id, COUNT(DISTINCT c.city) AS city_count
+    FROM order_items oi
+    JOIN orders o ON oi.order_id = o.order_id
+    JOIN customers c ON o.customer_id = c.customer_id
+    GROUP BY oi.product_id
+    HAVING COUNT(DISTINCT c.city) > 1
+) t ON p.product_id = t.product_id;
+
+SELECT 
+    p.product_id,
+    p.name,
+    COUNT(DISTINCT c.city) AS city_count
+FROM products p
+JOIN order_items oi ON p.product_id = oi.product_id
+JOIN orders o ON oi.order_id = o.order_id
+JOIN customers c ON o.customer_id = c.customer_id
+GROUP BY p.product_id, p.name
+HAVING COUNT(DISTINCT c.city) > 1;
+
+
+
 
