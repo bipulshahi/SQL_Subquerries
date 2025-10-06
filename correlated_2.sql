@@ -162,5 +162,44 @@ GROUP BY p.product_id, p.name
 HAVING COUNT(DISTINCT c.city) > 1;
 
 
+/* generate a report that shows, for each order, 
+how much higher or lower its total amount is compared to the average order total of the same customer.
+*/
+
+SELECT o.customer_id, c.name, o.order_id, 
+       o.total - (SELECT AVG(o2.total) 
+                  FROM orders o2 
+                  WHERE o2.customer_id = o.customer_id) AS margin
+FROM orders o
+JOIN customers c ON o.customer_id = c.customer_id;
+
+/*
+Modify the query to classify each order using a CASE expression:
+'Above Average' if margin > 0
+'Below Average' otherwise.
+*/
+
+SELECT 
+    o.customer_id, 
+    c.name, 
+    o.order_id, 
+    o.total - (
+        SELECT AVG(o2.total)
+        FROM orders o2
+        WHERE o2.customer_id = o.customer_id
+    ) AS margin,
+    CASE 
+        WHEN o.total - (
+            SELECT AVG(o2.total)
+            FROM orders o2
+            WHERE o2.customer_id = o.customer_id
+        ) > 0 THEN 'Above Average'
+        ELSE 'Below Average'
+    END AS order_classification
+FROM orders o
+JOIN customers c 
+    ON o.customer_id = c.customer_id;
+
+
 
 
