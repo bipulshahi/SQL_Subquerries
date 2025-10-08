@@ -72,11 +72,19 @@ FROM Tours;
 
 -- Self Join + Date Function in WHERE + GROUP BY
 -- Compare employees with hire_date before/after manager hire date (assume managers are also in Employees).
-SELECT e1.first_name AS Employee, e2.first_name AS Manager, e1.hire_date, e2.hire_date AS Manager_Hire
-FROM Employees e1
-JOIN Employees e2 ON e1.emp_id != e2.emp_id
-WHERE e1.hire_date > e2.hire_date
-GROUP BY e1.emp_id, e2.emp_id;
+SELECT 
+    e.first_name AS Employee,
+    m.first_name AS Manager,
+    e.hire_date AS Employee_Hire_Date,
+    m.hire_date AS Manager_Hire_Date,
+    CASE 
+        WHEN e.hire_date > m.hire_date THEN 'After Manager'
+        ELSE 'Before Manager'
+    END AS Hire_Comparison
+FROM Employees e
+JOIN Employees m 
+    ON e.manager_id = m.emp_id;
+
 
 -- JOIN + GROUP BY + HAVING + CASE
 -- Classify branches by total bookings in August 2023 as 'High', 'Medium', 'Low'.
